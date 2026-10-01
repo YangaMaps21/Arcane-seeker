@@ -170,7 +170,7 @@ input, select {
 .hero-cards { display: flex; justify-content: center; gap: clamp(8px, 2vw, 18px); perspective: 1000px; }
 .hero-cards .tcard { width: clamp(92px, 24vw, 150px); }
 .hero-reveal { min-height: 7.5em; margin-top: 18px; text-align: center; }
-.hero-reveal p { margin: 0 auto; }
+.hero-reveal p { margin: 0 auto 12px; }
 
 .booths { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0; border-top: 1px solid rgba(215,167,78,.35); }
 .booth { display: block; text-decoration: none; color: var(--text); padding: 26px 22px 30px 0; border-bottom: 1px solid rgba(215,167,78,.35); }
@@ -212,7 +212,8 @@ input, select {
 .palm-layout { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 40px; align-items: start; }
 @media (max-width: 860px) { .palm-layout { grid-template-columns: 1fr; } }
 .palm-svg { width: 100%; max-width: 420px; }
-.palm-svg .hand { fill: #e9cfa8; stroke: var(--ink); stroke-width: 2; }
+.palm-svg .hand { fill: #e9cfa8; stroke: var(--ink); }
+.palm-svg .hand-fill { fill: #e9cfa8; stroke: none; }
 .palm-svg .line { fill: none; stroke: var(--oxblood); stroke-width: 4; stroke-linecap: round; cursor: pointer; transition: stroke .2s, stroke-width .2s; }
 .palm-svg .line-hit { fill: none; stroke: transparent; stroke-width: 22; cursor: pointer; }
 .palm-svg .line.active, .palm-svg g:hover .line, .palm-svg g:focus .line { stroke: #b0402c; stroke-width: 6; }
