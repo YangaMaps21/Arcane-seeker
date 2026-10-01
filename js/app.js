@@ -19,8 +19,21 @@ const nav = document.getElementById("nav");
 const toggle = document.querySelector(".nav-toggle");
 let cleanup = null;
 
+let currentKey = location.hash.replace(/^#\/?/, "").split(/[/?]/)[0];
+
+// Handle in-site links ourselves so navigation works even inside embedded
+// previews that restrict hash changes.
+document.addEventListener("click", e => {
+  const a = e.target.closest('a[href^="#/"]');
+  if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return;
+  e.preventDefault();
+  currentKey = a.getAttribute("href").slice(2);
+  try { history.pushState(null, "", a.getAttribute("href")); } catch {}
+  route();
+});
+
 function route() {
-  const key = location.hash.replace(/^#\/?/, "").split(/[/?]/)[0];
+  const key = currentKey;
   const r = ROUTES[key] || ROUTES[""];
   if (typeof cleanup === "function") cleanup();
   main.innerHTML = "";
@@ -41,5 +54,7 @@ toggle.addEventListener("click", () => {
   toggle.setAttribute("aria-expanded", String(open));
 });
 
-window.addEventListener("hashchange", route);
+const syncFromHash = () => { currentKey = location.hash.replace(/^#\/?/, "").split(/[/?]/)[0]; route(); };
+window.addEventListener("hashchange", syncFromHash);
+window.addEventListener("popstate", syncFromHash);
 route();
