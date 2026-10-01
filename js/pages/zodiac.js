@@ -1,22 +1,23 @@
-import { SIGNS, signFor, fmtRange, dailyReading, compatibility } from "../data/zodiac.js";
-import { medallionSVG, glyph, esc } from "../ui.js";
+import { SIGNS, signFor, fmtRange, dailyReading, compatibility, seasonSign } from "../data/zodiac.js";
+import { constellationSVG } from "../data/constellations.js";
+import { glyph, esc } from "../ui.js";
 
 const store = {
   get: k => { try { return localStorage.getItem(k); } catch { return null; } },
   set: (k, v) => { try { localStorage.setItem(k, v); } catch {} },
 };
 
-export default function zodiac(main) {
+export default function zodiac(main, params = new URLSearchParams()) {
   main.innerHTML = `
     <div class="page-intro">
       <h1>Star signs</h1>
-      <p>Enter your birthday to find your sun sign, or pick any sign to read about it.</p>
+      <p>Enter your birthday to find your sun sign, or pick any sign to read its constellation, traits and today's update.</p>
     </div>
     <form class="form-row" id="zform">
       <div class="field"><label for="bday">Birthday</label><input type="date" id="bday" required></div>
-      <button class="btn" type="submit">Read my stars</button>
+      <button class="btn primary" type="submit">Read my stars</button>
       <div class="field"><label for="pick">Or choose a sign</label>
-        <select id="pick"><option value="">—</option>${SIGNS.map(s => `<option>${s.name}</option>`).join("")}</select>
+        <select id="pick"><option value="">Choose…</option>${SIGNS.map(s => `<option>${s.name}</option>`).join("")}</select>
       </div>
     </form>
     <div id="zout" aria-live="polite"></div>`;
@@ -38,12 +39,12 @@ export default function zodiac(main) {
 
   function render(s) {
     const today = dailyReading(s);
-    const ring = SIGNS.map(x => ({ text: glyph(x.glyph), active: x === s }));
     out.innerHTML = `
       <div class="reading-grid">
-        <div>${medallionSVG({ big: glyph(s.glyph), small: s.symbol, ring, label: `${s.name}, ${s.symbol}` })}</div>
-        <article class="parchment">
-          <h2>${s.name}</h2>
+        <div><div class="sky-disc">${constellationSVG(s.name, { animate: true })}</div>
+          <p class="muted" style="text-align:center;max-width:320px;margin-top:12px">${s.symbol}${s === seasonSign() ? " is in season now" : ""}</p></div>
+        <article class="panel">
+          <h2>${s.name} ${glyph(s.glyph)}</h2>
           <p class="muted" style="margin-top:-.4em">${fmtRange(s)}</p>
           <dl class="facts">
             <div><dt>Element</dt><dd>${s.element}</dd></div>
@@ -76,8 +77,8 @@ export default function zodiac(main) {
       const c = compatibility(s, p);
       compat.innerHTML = `
         <p style="font-family:var(--display);font-size:1.4rem;margin-bottom:.2em">${glyph(s.glyph)} ${s.name} + ${glyph(p.glyph)} ${p.name}: ${c.score}%</p>
-        <div role="meter" aria-valuenow="${c.score}" aria-valuemin="0" aria-valuemax="100" aria-label="Compatibility" style="height:8px;border-radius:4px;background:rgba(43,26,18,.15);max-width:360px;margin-bottom:10px">
-          <div style="height:100%;width:${c.score}%;border-radius:4px;background:var(--oxblood)"></div>
+        <div role="meter" aria-valuenow="${c.score}" aria-valuemin="0" aria-valuemax="100" aria-label="Compatibility" style="height:8px;border-radius:4px;background:rgba(255,255,255,.08);max-width:360px;margin-bottom:10px">
+          <div style="height:100%;width:${c.score}%;border-radius:4px;background:linear-gradient(90deg,var(--comet),var(--gold))"></div>
         </div>
         <p>${c.note}</p>`;
     };
@@ -86,5 +87,9 @@ export default function zodiac(main) {
   }
 
   const saved = store.get("as-bday");
-  if (saved) { bday.value = saved; main.querySelector("#zform").requestSubmit(); }
+  if (saved) bday.value = saved;
+  const asked = SIGNS.find(x => x.name === params.get("sign"));
+  if (asked) { pick.value = asked.name; render(asked); }
+  else if (saved) main.querySelector("#zform").requestSubmit();
+  else { pick.value = seasonSign().name; render(seasonSign()); }
 }

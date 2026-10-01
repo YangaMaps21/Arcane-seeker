@@ -83,10 +83,10 @@ export default function palm(main) {
           ${Object.entries(LINES).map(([k, l]) => `<button type="button" data-line="${k}" aria-pressed="false">${l.name}</button>`).join("")}
         </div>
         ${handSVG()}
-        <label class="choice" style="color:var(--muted)"><input type="checkbox" id="showMounts"> Show the mounts</label>
+        <label class="choice" style="color:var(--dim)"><input type="checkbox" id="showMounts"> Show the mounts</label>
       </div>
       <div>
-        <div class="parchment" id="lineInfo" aria-live="polite">
+        <div class="panel" id="lineInfo" aria-live="polite">
           <h2>The five main lines</h2>
           <p>Most palms show the heart, head and life lines clearly. The fate and sun lines are subtler and sometimes missing — that's normal.</p>
           <p class="muted">Select a line on the hand, or one of the buttons above it.</p>
@@ -97,7 +97,7 @@ export default function palm(main) {
     <section style="margin-top:56px">
       <h2>Read your own palm</h2>
       <p class="muted">Look at your dominant hand in good light and choose what you see.</p>
-      <form class="parchment" id="palmQuiz">
+      <form class="panel" id="palmQuiz">
         ${QUIZ.map(q => `
           <div class="quiz-q"><fieldset><legend>${q.q}</legend>
             ${q.opts.map(([v, label]) => `<label class="choice"><input type="radio" name="${q.key}" value="${v}" required> <span>${label}</span></label>`).join("")}
@@ -151,9 +151,9 @@ function handSVG() {
   <svg class="palm-svg" viewBox="40 30 380 490" role="img" aria-label="Diagram of a right palm with the five main lines">
     <g class="hand" stroke-width="4">${shapes}</g>
     <g class="hand-fill">${shapes}</g>
-    <g stroke="rgba(43,26,18,.35)" stroke-width="1.5" fill="none" stroke-linecap="round">
+    <g class="creases" stroke-width="1.5" fill="none" stroke-linecap="round">
       <path d="M92 200 h30 M92 236 h30 M140 140 h34 M140 190 h34 M194 115 h36 M194 170 h36 M246 150 h34 M246 200 h34"/>
-      <path d="M130 178 V250 M182 112 V246 M237 122 V250" stroke="rgba(43,26,18,.7)" stroke-width="2"/>
+      <path d="M130 178 V250 M182 112 V246 M237 122 V250" stroke="rgba(143,220,255,.45)" stroke-width="1.5"/>
     </g>
     <g id="mounts" style="display:none">
       ${MOUNTS.map(([n, x, y, t]) => `<g><title>Mount of ${n}: ${t}</title><circle class="mount" cx="${x}" cy="${y}" r="22"/><text class="mount-label" x="${x}" y="${y + 4}" text-anchor="middle">${n}</text></g>`).join("")}

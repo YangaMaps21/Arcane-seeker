@@ -11,12 +11,12 @@ export default function tarot(main) {
     </div>
     <form class="form-row" id="tform">
       <div class="field" style="flex:1 1 280px"><label for="q">Your question (optional)</label><input id="q" placeholder="What should I focus on this month?" maxlength="140"></div>
-      <div class="field"><span class="field-label" style="font-family:var(--display);color:var(--muted)">Spread</span>
+      <div class="field"><span class="field-label" style="color:var(--dim)">Spread</span>
         <div class="segmented" id="spreadPick" role="group" aria-label="Spread">
           ${Object.entries(SPREADS).map(([k, s]) => `<button type="button" data-k="${k}" aria-pressed="${k === spreadKey}">${s.label}</button>`).join("")}
         </div>
       </div>
-      <button class="btn" type="submit">Shuffle and deal</button>
+      <button class="btn primary" type="submit">Shuffle and deal</button>
     </form>
     <div id="table"></div>
     <div id="reading" aria-live="polite"></div>`;
@@ -40,7 +40,7 @@ export default function tarot(main) {
     let revealed = 0;
 
     table.innerHTML = `
-      ${question ? `<p class="oracle-voice" style="color:var(--card);text-align:center;border:0;padding:0">“${esc(question)}”</p>` : ""}
+      ${question ? `<p class="oracle-voice" style="color:var(--star);text-align:center;border:0;padding:0">“${esc(question)}”</p>` : ""}
       <div class="spread spread-${spread.positions.length}"></div>
       <p style="text-align:center"><button class="btn ghost" type="button" id="revealAll">Turn all cards</button></p>`;
     reading.innerHTML = "";
@@ -63,7 +63,7 @@ export default function tarot(main) {
     });
 
     const list = document.createElement("div");
-    list.className = "parchment reading-list";
+    list.className = "panel reading-list";
     list.hidden = true;
     reading.append(list);
     const entries = new Array(drawn.length);
@@ -105,5 +105,5 @@ function summary(drawn) {
   }
   if (revs >= Math.ceil(drawn.length / 2)) lines.push("Many reversals suggest energy that is blocked or turned inward — something to release before moving forward.");
   if (!lines.length) lines.push("A balanced spread: read each position on its own and notice where the story flows.");
-  return `<div class="reading-item" style="border-top:1px solid rgba(43,26,18,.25);padding-top:16px"><h3>The spread as a whole</h3><p class="oracle-voice">${lines.join(" ")}</p></div>`;
+  return `<div class="reading-item" style="border-top:1px solid var(--line);padding-top:16px"><h3>The spread as a whole</h3><p class="oracle-voice">${lines.join(" ")}</p></div>`;
 }

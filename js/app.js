@@ -4,6 +4,7 @@ import chinese from "./pages/chinese.js";
 import tarot from "./pages/tarot.js";
 import palm from "./pages/palm.js";
 import game from "./pages/game.js";
+import { startSky } from "./sky.js";
 
 const ROUTES = {
   "": { render: home, title: "Arcane Seeker" },
@@ -19,7 +20,20 @@ const nav = document.getElementById("nav");
 const toggle = document.querySelector(".nav-toggle");
 let cleanup = null;
 
-let currentKey = location.hash.replace(/^#\/?/, "").split(/[/?]/)[0];
+/** "#/zodiac?sign=Leo" → { key: "zodiac", params: URLSearchParams } */
+function parse(hash) {
+  const raw = hash.replace(/^#\/?/, "");
+  const [path, query = ""] = raw.split("?");
+  return { key: path.split("/")[0], params: new URLSearchParams(query) };
+}
+
+let current = parse(location.hash);
+
+export function go(href) {
+  current = parse(href);
+  try { history.pushState(null, "", href); } catch {}
+  route();
+}
 
 // Handle in-site links ourselves so navigation works even inside embedded
 // previews that restrict hash changes.
@@ -27,21 +41,19 @@ document.addEventListener("click", e => {
   const a = e.target.closest('a[href^="#/"]');
   if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return;
   e.preventDefault();
-  currentKey = a.getAttribute("href").slice(2);
-  try { history.pushState(null, "", a.getAttribute("href")); } catch {}
-  route();
+  go(a.getAttribute("href"));
 });
 
 function route() {
-  const key = currentKey;
+  const { key, params } = current;
   const r = ROUTES[key] || ROUTES[""];
   if (typeof cleanup === "function") cleanup();
   main.innerHTML = "";
-  cleanup = r.render(main);
+  cleanup = r.render(main, params);
   document.title = r.title;
   for (const a of nav.querySelectorAll("a")) {
-    a.toggleAttribute("aria-current", a.getAttribute("href") === `#/${key}`);
-    if (a.hasAttribute("aria-current")) a.setAttribute("aria-current", "page");
+    if (a.getAttribute("href") === `#/${key}`) a.setAttribute("aria-current", "page");
+    else a.removeAttribute("aria-current");
   }
   nav.classList.remove("open");
   toggle.setAttribute("aria-expanded", "false");
@@ -54,7 +66,9 @@ toggle.addEventListener("click", () => {
   toggle.setAttribute("aria-expanded", String(open));
 });
 
-const syncFromHash = () => { currentKey = location.hash.replace(/^#\/?/, "").split(/[/?]/)[0]; route(); };
+const syncFromHash = () => { current = parse(location.hash); route(); };
 window.addEventListener("hashchange", syncFromHash);
 window.addEventListener("popstate", syncFromHash);
+
+startSky(document.getElementById("sky"));
 route();

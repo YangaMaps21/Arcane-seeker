@@ -91,6 +91,26 @@ export const fmtRange = s => {
   return `${m[s.start[0]-1]} ${s.start[1]} – ${m[s.end[0]-1]} ${s.end[1]}`;
 };
 
+export const localDateKey = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+
+/** The sign whose season it is right now. */
+export const seasonSign = (date = new Date()) => signFor(date.getMonth() + 1, date.getDate());
+
+/** All 12 signs, starting with the one in season. */
+export function signsFromSeason(date = new Date()) {
+  const i = SIGNS.indexOf(seasonSign(date));
+  return [...SIGNS.slice(i), ...SIGNS.slice(0, i)];
+}
+
+/** Days left in a sign's season, counting today. */
+export function daysLeftInSeason(sign, date = new Date()) {
+  let y = date.getFullYear();
+  if (sign.end[0] < date.getMonth() + 1) y++;
+  const end = new Date(y, sign.end[0] - 1, sign.end[1]);
+  const today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  return Math.round((end - today) / 86400000) + 1;
+}
+
 // ---------- deterministic daily reading ----------
 export function seeded(str) {
   let h = 2166136261;
@@ -116,7 +136,7 @@ const CLOSERS = ["Evening favours rest.", "Expect a pleasant surprise before the
 const COLOURS = ["Garnet", "Saffron", "Sea green", "Midnight blue", "Rose gold", "Ivory", "Amber", "Violet", "Copper", "Jade"];
 
 export function dailyReading(sign, date = new Date()) {
-  const key = `${sign.name}-${date.toISOString().slice(0, 10)}`;
+  const key = `${sign.name}-${localDateKey(date)}`;
   const r = seeded(key);
   const pick = a => a[Math.floor(r() * a.length)];
   const area = pick(AREAS);

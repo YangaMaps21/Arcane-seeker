@@ -9,7 +9,7 @@ export default function chinese(main) {
     </div>
     <form class="form-row" id="cform">
       <div class="field"><label for="cbday">Birthday</label><input type="date" id="cbday" required min="1900-01-01" max="2099-12-31"></div>
-      <button class="btn" type="submit">Find my animal</button>
+      <button class="btn primary" type="submit">Find my animal</button>
     </form>
     <div id="cout" aria-live="polite"></div>
     <section style="margin-top:48px">
@@ -51,7 +51,7 @@ export default function chinese(main) {
     out.innerHTML = `
       <div class="reading-grid">
         <div>${medallionSVG({ big: a.hanzi, small: a.name, ring, label: title })}</div>
-        <article class="parchment">
+        <article class="panel">
           <h2>${title}</h2>
           ${extra ? `<p class="muted" style="margin-top:-.4em">Lunar year ${extra.year} · ${extra.polarity}</p>` : ""}
           ${extra?.note ? `<p class="muted"><em>${extra.note}</em></p>` : ""}
