@@ -185,7 +185,7 @@ input, select {
 .tcard .face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 10px; overflow: hidden; }
 .tcard .back { background: var(--oxblood); box-shadow: inset 0 0 0 4px var(--oxblood), inset 0 0 0 5px var(--brass), 0 10px 24px rgba(0,0,0,.5); }
 .tcard .front { transform: rotateY(180deg); background: var(--card); color: var(--ink); box-shadow: inset 0 0 0 4px var(--card), inset 0 0 0 5px var(--brass-dim), 0 10px 24px rgba(0,0,0,.5); }
-.tcard .front.reversed .art { transform: rotate(180deg); }
+.tcard .front.reversed { transform: rotateY(180deg) rotateZ(180deg); }
 .tcard svg { width: 100%; height: 100%; display: block; }
 .tcard:not(.flipped):hover { transform: translateY(-6px); }
 .tcard[disabled] { cursor: default; }
@@ -239,7 +239,7 @@ input, select {
 .game-board .tcard:not(.flipped):hover { transform: none; }
 .game-mid { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
 .game-status { text-align: center; min-height: 3.2em; font-family: var(--display); font-size: var(--step-1); color: var(--card); margin: 18px auto 8px; max-width: 40ch; }
-.scoreboard { display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; font-family: var(--display); color: var(--card); margin-bottom: 18px; }
+.scoreboard { display: flex; justify-content: center; gap: 8px 22px; flex-wrap: wrap; font-family: var(--display); color: var(--card); margin-bottom: 18px; }
 .scoreboard b { color: var(--brass); font-size: 1.6rem; font-weight: 400; margin-left: 6px; }
 .coins { display: inline-flex; gap: 3px; vertical-align: middle; }
 .coin { width: 16px; height: 16px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #f6d78b, var(--brass) 55%, #8a6526); box-shadow: 0 1px 2px rgba(0,0,0,.5); }
@@ -262,3 +262,4 @@ input, select {
 }
 
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.parchment .field label { color: var(--ink-soft); }

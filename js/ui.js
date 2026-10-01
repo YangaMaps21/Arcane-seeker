@@ -68,7 +68,7 @@ function minorArt(card) {
     const scale = card.number === 1 ? 2 : card.number <= 3 ? 0.9 : 0.62;
     return PIP_LAYOUT[card.number].map(([x, y]) => `<g transform="translate(${x} ${y})">${g(scale)}</g>`).join("");
   }
-  const letter = card.rank[0];
+  const letter = { Page: "P", Knight: "Kn", Queen: "Q", King: "K" }[card.rank];
   const crown = card.number >= 13 ? `<path d="M-14 -44 l5 -10 5 7 4 -10 4 10 5 -7 5 10 z" fill="${GOLD}" stroke="${INK}"/>` : "";
   return `${crown}<circle r="32" fill="none" stroke="${BRASS}"/><g transform="translate(0 -2)">${g(1.3)}</g><text y="48" text-anchor="middle" font-family="IM Fell English SC, Georgia, serif" font-size="16" fill="${OX}">${letter}</text>`;
 }
@@ -81,7 +81,7 @@ export function cardFrontSVG(card) {
   return `<svg viewBox="0 0 140 240" role="img" aria-label="${esc(card.name)}">
     <rect x="9" y="9" width="122" height="222" rx="5" fill="none" stroke="${BRASS}" stroke-width="1"/>
     <text x="70" y="32" text-anchor="middle" font-family="IM Fell English, Georgia, serif" font-size="15" fill="${OX}">${esc(top)}</text>
-    <g class="art" style="transform-origin:70px 118px"><g transform="translate(70 118)">${art}</g></g>
+    <g transform="translate(70 118)">${art}</g>
     <line x1="22" y1="196" x2="118" y2="196" stroke="${BRASS}" stroke-width=".8"/>
     <text x="70" y="214" text-anchor="middle" font-family="IM Fell English SC, Georgia, serif" font-size="${fs}" fill="${INK}">${esc(name)}</text>
   </svg>`;
