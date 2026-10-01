@@ -32,6 +32,7 @@
   --gutter: clamp(16px, 4vw, 40px);
   --measure: 66ch;
   --r-card: 10px;
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -75,7 +76,7 @@ p { margin: 0 0 1em; max-width: var(--measure); }
   border-bottom: 1px solid rgba(215,167,78,.35);
   background: rgba(36,8,15,.6);
   backdrop-filter: blur(6px);
-  position: sticky; top: 0; z-index: 5;
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
 }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--brass); font-family: var(--display-sc); font-size: 1.45rem; }
 .brand-mark { width: 34px; height: 34px; }
